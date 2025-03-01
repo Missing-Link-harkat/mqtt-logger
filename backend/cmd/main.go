@@ -1,8 +1,9 @@
 package main
 
 import (
-	"mqtt--logger/internal/api"
-	"mqtt--logger/internal/mqtt"
+	"github.com/Missing-Link-harkat/mqtt-logger/internal/api"
+	"github.com/Missing-Link-harkat/mqtt-logger/internal/db"
+	"github.com/Missing-Link-harkat/mqtt-logger/internal/mqtt"
 )
 
 
@@ -10,6 +11,10 @@ func main() {
 
 
 	go mqtt.InitMQTT("tcp://localhost:1883", "test/topic")
+
+
+	dsn := "host=localhost user=youruser password=yourpass dbname=yourdb port=5432 sslmode=disable"
+	go db.ConnectDB(dsn)
 
 	r := api.SetupRouter()
 	r.Run(":8080")
