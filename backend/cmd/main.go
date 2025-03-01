@@ -9,7 +9,7 @@ import (
 func main() {
 
 
-	mqtt.InitMQTT("tcp://localhost:1883", "test/topic")
+	go mqtt.InitMQTT("tcp://localhost:1883", "test/topic")
 
 	r := api.SetupRouter()
 	r.Run(":8080")
