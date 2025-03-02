@@ -13,7 +13,7 @@ func main() {
 	go mqtt.InitMQTT("tcp://localhost:1883", "test/topic")
 
 
-	dsn := "host=localhost user=youruser password=yourpass dbname=yourdb port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=example dbname=example_db port=5432 sslmode=disable"
 	go db.ConnectDB(dsn)
 
 	r := api.SetupRouter()
