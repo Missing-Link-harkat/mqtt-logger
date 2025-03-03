@@ -31,7 +31,8 @@ func main() {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
-	go mqtt.InitMQTT("tcp://localhost:1883", "test/topic", dbConn)
+	mqttBroker := fmt.Sprintf("tcp://%s:%s", getEnv("MQTT_HOST"), getEnv("MQTT_PORT"))
+	go mqtt.InitMQTT(mqttBroker, dbConn)
 
 	r := api.SetupRouter()
 	r.Run(":8080")

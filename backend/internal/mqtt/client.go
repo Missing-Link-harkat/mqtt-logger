@@ -12,7 +12,7 @@ import (
 
 var mqttClient mqtt.Client
 
-func InitMQTT(broker string, topic string, dbConn *gorm.DB) {
+func InitMQTT(broker string, dbConn *gorm.DB) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(broker)
 	opts.SetClientID("go_mqtt_client")
@@ -27,22 +27,30 @@ func InitMQTT(broker string, topic string, dbConn *gorm.DB) {
 
 	opts.OnConnect = func(client mqtt.Client) {
 		log.Println("Connected to MQTT broker")
-		if token := client.Subscribe(topic, 1, func(client mqtt.Client, msg mqtt.Message) {
-			messageHandler(client, msg, dbConn)
-		}); token.Wait() && token.Error() != nil {
-			log.Printf("Subscription error: %v", token.Error())
+
+		// Retrieve topics
+		var topics []db.Topics
+		if err := dbConn.Find(&topics).Error; err != nil {
+			log.Printf("Error retrieving topics from db: %v", err)
+			return
 		}
+
+		for _, topic := range topics {
+			log.Printf("in a loop")
+			if token := client.Subscribe(topic.Topic, 1, func(client mqtt.Client, msg mqtt.Message) {
+				messageHandler(client, msg, dbConn)
+			}); token.Wait() && token.Error() != nil {
+				log.Printf("Subscription error: %v", token.Error())
+			}
+			log.Printf("Subscribed to: %v", topic.Topic)
+		}
+
 	}
 
 	mqttClient = mqtt.NewClient(opts)
 	if token := mqttClient.Connect(); token.Wait() && token.Error() != nil {
 		log.Fatalf("MQTT connection error: %v", token.Error())
 	}
-
-	mqttClient.Subscribe(topic, 1, func(client mqtt.Client, msg mqtt.Message) {
-		messageHandler(client, msg, dbConn)
-	})
-	fmt.Println("Subscribed to: ", topic)
 }
 
 func messageHandler(client mqtt.Client, msg mqtt.Message, dbConn *gorm.DB) {
