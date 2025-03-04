@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,9 +9,16 @@ import (
 )
 
 func HandleError(c *gin.Context, err error) {
+
+	var statusCode int
+	var errorMessage string
+
 	if err == gorm.ErrRecordNotFound {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
+		statusCode = http.StatusNotFound
+		errorMessage = "Not found"
 	} else {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve resource"})
+		statusCode = http.StatusInternalServerError
+		errorMessage = fmt.Sprintf("Error: %v", err)
 	}
+	c.JSON(statusCode, errorMessage)
 }

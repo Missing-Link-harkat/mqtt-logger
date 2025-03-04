@@ -36,7 +36,6 @@ func InitMQTT(broker string, dbConn *gorm.DB) {
 		}
 
 		for _, topic := range topics {
-			log.Printf("in a loop")
 			if token := client.Subscribe(topic.Topic, 1, func(client mqtt.Client, msg mqtt.Message) {
 				messageHandler(client, msg, dbConn)
 			}); token.Wait() && token.Error() != nil {

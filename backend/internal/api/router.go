@@ -13,5 +13,6 @@ func SetupRouter() *gin.Engine {
 	/*r.GET("/messages", getMessages)*/
 
 	r.GET("/topics", handlers.GetTopics)
+	r.GET("topics/data", handlers.GetSensorData)
 	return r
 }
