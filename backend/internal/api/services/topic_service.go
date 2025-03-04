@@ -37,6 +37,9 @@ func FetchSensorData(topic string, startTime string, endTime string) ([]dto.Sens
 
 	var sensorData []db.Message
 
+	/*
+		TODO: fix logic
+	*/
 	if (startTime != "" && endTime == "") || (startTime == "" && endTime != "") {
 		return nil, errors.New("both start_time and end_time must be specified together")
 	}
