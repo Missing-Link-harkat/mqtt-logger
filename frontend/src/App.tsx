@@ -1,13 +1,14 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./App.css";
 
-import './App.css'
+const queryClient = new QueryClient();
 
 function App() {
-
   return (
-    <div>
+    <QueryClientProvider client={queryClient}>
       <h1>mqtt-logger</h1>
-    </div>
-  )
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;
