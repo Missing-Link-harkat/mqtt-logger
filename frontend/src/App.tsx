@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import TopicDropDown from "./components/topicDropdown/TopicDropDown";
+import DataList from "./components/dataList/DataList";
 
 import "./App.css";
 
@@ -12,6 +13,7 @@ const App = () =>  {
       <div>
         <h1>mqtt-logger</h1>
         <TopicDropDown setChosenTopic={setChosenTopic}/>
+        <DataList chosenTopic={chosenTopic} />
       </div>
   );
 }
