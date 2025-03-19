@@ -1,8 +1,19 @@
-const url = import.meta.env.API_URL;
+import { z } from "zod";
 
-export const fetchTopics = async (): Promise<any> => {
+import { TopicsArray, TopicsSchema  } from "../schemas/TopicSchema";
+
+const url = import.meta.env.VITE_API_URL;
+
+export const fetchTopics = async (): Promise<TopicsArray> => {
   const response: Response = await fetch(url + "/topics");
-  return await response.json();
+  const data: unknown = await response.json();
+
+  const result: z.SafeParseReturnType<unknown, TopicsArray> = TopicsSchema.safeParse(data);
+
+  if (!result.success) {
+    throw new Error("Data validation failed");
+  }
+  return result.data;
 };
 
 export const fetchData = async (): Promise<any> => {

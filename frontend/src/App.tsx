@@ -1,13 +1,18 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+
+import TopicDropDown from "./components/topicDropdown/TopicDropDown";
+
 import "./App.css";
 
-const queryClient = new QueryClient();
+const App = () =>  {
 
-function App() {
+  const [chosenTopic, setChosenTopic] = useState<string>("")
   return (
-    <QueryClientProvider client={queryClient}>
-      <h1>mqtt-logger</h1>
-    </QueryClientProvider>
+
+      <div>
+        <h1>mqtt-logger</h1>
+        <TopicDropDown setChosenTopic={setChosenTopic}/>
+      </div>
   );
 }
 
