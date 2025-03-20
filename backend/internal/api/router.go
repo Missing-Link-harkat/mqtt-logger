@@ -8,8 +8,8 @@ import (
 )
 
 func SetupRouter() *gin.Engine {
+	gin.SetMode(utils.GetEnv("GIN_MODE"))
 	r := gin.Default()
-
 	r.SetTrustedProxies([]string{"localhost"})
 
 	r.Use(cors.New(cors.Config{
