@@ -10,12 +10,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8081:8080
+    networks:
+      - app-network
 
   backend:
     build:
@@ -27,5 +31,24 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mqtt_logger_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    networks:
+      - app-network
 volumes:
   pgdata:
+
+networks:
+  app-network:
+    driver: bridge
