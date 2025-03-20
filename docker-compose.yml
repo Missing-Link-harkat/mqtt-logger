@@ -17,5 +17,15 @@ services:
     ports:
       - 8081:8080
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mqtt_logger_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
 volumes:
   pgdata:
